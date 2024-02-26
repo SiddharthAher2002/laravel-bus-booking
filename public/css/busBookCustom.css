@@ -1,0 +1,52 @@
+
+.bus-book-form-container{
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('../AriaTheme/images/header-background.jpg') center center no-repeat;
+	background-size: cover;
+    padding-top: 8rem;
+	padding-bottom: 2.125rem;
+	text-align: center;
+}
+
+.seat-selection {
+    display: flex;
+
+}
+
+.seat {
+    width: 50px;
+    height: 50px;
+    border: 2px solid white;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 50px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.empty-seat {
+    border: none;
+    width: 50px;
+}
+
+.selected-seat {
+    background-color: #19db19;
+    color: black !important;
+}
+
+.seat-booked {
+    background-color: orangered;
+    color: white;
+    pointer-events: none;
+}
+
+.seat-booked-other {
+    background-color: red;
+    color: white;
+    pointer-events: none;
+}
+
+a {
+    text-decoration: none;
+}
+

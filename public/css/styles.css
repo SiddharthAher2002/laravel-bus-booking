@@ -1,0 +1,56 @@
+
+.register-bus-container{
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('../AriaTheme/images/header-background.jpg') center center no-repeat;
+	background-size: cover;
+    padding-top: 8rem;
+	padding-bottom: 2.125rem;
+	text-align: center;
+}
+
+/* overriding AreilTheme css  */
+body{
+    color: white;
+}
+.header {
+	background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('../images/home-bg-2.jpg') center center no-repeat;
+	background-size: cover;
+}
+.bus-booking-form .form-control-input{
+    padding: 10px;
+}
+
+.bus-booking-form .form-label{
+    color: white;
+}
+
+.bus-booking-form .book-now-button{
+    padding: 8px;
+}
+
+
+/*details section work with us*/
+
+.register-bus .accordion .area-1 {
+    height: 27rem;
+    background: url('../images/bus-business-2.jpg') center center no-repeat;
+    background-size: cover;
+}
+.register-bus .accordion {
+    height: auto;
+}
+.register-bus .accordion .accordion-container {
+    padding: 0px;
+}
+
+/* Contact us */
+
+.contact-us{
+    color: #787976;
+}
+
+/* footer */
+
+.footer .footer{
+    padding: 10px;
+}
+
