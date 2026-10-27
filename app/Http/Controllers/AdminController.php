@@ -3,13 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use Illuminate\Http\Request;
 use App\Models\Bus;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
     public function showDashboard(){
         return view('admin.views.dashboard');
+    }
+
+    public function showUserList(Request $request, $searchTxt = null)
+    {
+        $search = $searchTxt ?? $request->get('searchTxt');
+        if ($search) {
+            $users = User::where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('email', 'LIKE', '%' . $search . '%')
+                ->orWhere('user_type', 'LIKE', '%' . $search . '%')
+                ->paginate(10);
+        } else {
+            $users = User::paginate(10);
+        }
+
+        return view('admin.views.userGrid', ['users' => $users, 'searchTxt' => $search]);
     }
     public function showRegForm()
     {

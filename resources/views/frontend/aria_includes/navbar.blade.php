@@ -4,7 +4,7 @@
         <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Aria</a> -->
 
         <!-- Image Logo -->
-        <a class="navbar-brand logo-image" href="index.html"><img src="{{asset('AriaTheme/images/logo.svg')}}" alt="alternative"></a>
+        <a class="navbar-brand logo-image" href="{{ route('home') }}"><img src="{{asset('AriaTheme/images/logo.svg')}}" alt="Bus-Book"></a>
         
         <!-- Mobile Menu Toggle Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,11 +25,11 @@
                     <a class="nav-link page-scroll" href="#services">SERVICES</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link page-scroll" href="{{route('bus.reg.show')}}">WORK WITH US</a>
+                    <a class="nav-link" href="{{route('bus.reg.show')}}">WORK WITH US</a>
                 </li>
                 <!-- Dropdown Menu -->          
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle page-scroll" href="#about" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">ABOUT</a>
+                    <a class="nav-link dropdown-toggle" href="#about" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">ABOUT</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="terms-conditions.html"><span class="item-text">TERMS CONDITIONS</span></a>
                         <div class="dropdown-items-divide-hr"></div>
@@ -41,17 +41,23 @@
                 <li class="nav-item">
                     <a class="nav-link page-scroll" href="#contact">CONTACT</a>
                 </li>
+                @guest
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">Sign-In</a>
+                    </li>
+                @else
                 <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="@if((Auth::user()==null)){{route('login')}} @else {{"#"}} @endif" role="button"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        @if(Auth::user()!=null)
+                    <a id="navbarDropdownUser" class="nav-link dropdown-toggle" href="#" role="button"
+                        data-bs-toggle="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }}
-                        @else
-                           {{"Sign-In"}}
-                        @endif
                     </a>
-                     @if(Auth::user()!=null)
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownUser">
+                            @if(Auth::user()->user_type === 'admin')
+                                <a class="dropdown-item text-primary font-weight-bold" href="{{ route('admin.index') }}">
+                                    <i class="fas fa-shield-alt mr-1"></i> Admin Panel
+                                </a>
+                                <div class="dropdown-divider"></div>
+                            @endif
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
@@ -61,8 +67,8 @@
                                 @csrf
                             </form>
                         </div>
-                    @endif
                 </li>
+                @endguest
             </ul>
             <span class="nav-item social-icons">
                 <span class="fa-stack">

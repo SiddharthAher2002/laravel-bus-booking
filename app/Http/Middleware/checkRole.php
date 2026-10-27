@@ -17,15 +17,15 @@ class checkRole
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             if (Auth::user()->user_type === 'admin') {
-                
                 return $next($request);
-            } else {
-                session(['error'=>'Only admins are allowed']);
-                return redirect()->route('home');
             }
+
+            return redirect()->route('home')->with('error', 'Unauthorized access. Admin privileges required.');
         }
-        return redirect()->route('home');    }
+
+        return redirect()->route('admin.login')->with('error', 'Please log in to access the admin area.');
+    }
     
 }

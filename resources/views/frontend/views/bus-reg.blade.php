@@ -78,10 +78,10 @@
                                 </div>
                             </div> <!-- end of col -->
                         </div> <!-- end of row -->
-                        <div class = "row justify-content-center mt-3">
-                            <div class = "col-4">
+                        <div class="row justify-content-center mt-3">
+                            <div class="col-12 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <button type="submit" class="form-control-submit-button" id="submit-booking-form">Submit</button>
+                                    <button type="submit" class="form-control-submit-button btn-block" id="submit-booking-form">Submit Bus Details</button>
                                 </div>
                             </div>
                         </div>
@@ -90,5 +90,5 @@
             </div> <!-- end of form-1 -->
             <!-- end of call me -->
         </div>
-    </div>>
+    </div>
 @endsection

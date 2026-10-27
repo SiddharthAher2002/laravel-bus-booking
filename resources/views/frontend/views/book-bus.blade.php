@@ -6,8 +6,9 @@
             <div class="form-1">
                 <div class="container">
                     <div class="row justify-content-center mb-4">
-                        <div class="col-6">
-                            <h3 class="text-light">Book Your Journey Now!</h3>
+                        <div class="col-12 text-center">
+                            <h2 class="text-white font-weight-bold" style="font-family: 'Montserrat', sans-serif;">Book Your Journey</h2>
+                            <p class="text-muted small">Select your travel date, destination, and choose your preferred seats.</p>
                         </div>
                     </div>
                     <div class="row">
@@ -70,8 +71,15 @@
 
 
                         <div class="col-lg-6">
-                            <label for="seatSelect" class="form-label text-center">Select a Seats</label><br>
-                            <div class="seat-selection d-block" id="seatSelection">
+                            <label for="seatSelect" class="form-label text-center d-block font-weight-bold">Select Your Seats</label>
+                            
+                            <div class="seat-legend mb-3 text-center">
+                                <span class="badge badge-secondary mr-2"><i class="far fa-square mr-1"></i> Available</span>
+                                <span class="badge badge-success mr-2" style="background-color: #14bf98;"><i class="fas fa-check-square mr-1"></i> Selected</span>
+                                <span class="badge badge-warning text-dark"><i class="fas fa-times-circle mr-1"></i> Booked</span>
+                            </div>
+
+                            <div class="seat-selection" id="seatSelection">
                                 <!-- Render the Seats from ajax -->
                             </div>
                         </div> <!-- end of col -->
@@ -79,8 +87,8 @@
                         
                     </div> <!-- end of row -->
                     <div class="row justify-content-center">
-                        <div class="col-4 form-group">
-                            <button type="" class="form-control-submit-button" id="submit-booking-form">BOOK NOW</button>
+                        <div class="col-12 col-md-6 col-lg-4 form-group">
+                            <button type="submit" class="form-control-submit-button btn-block" id="submit-booking-form">CONFIRM BOOKING</button>
                         </div>
                     </div>
 

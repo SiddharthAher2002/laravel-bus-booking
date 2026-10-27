@@ -18,21 +18,17 @@
 	<meta property="og:type" content="article" />
 
     <!-- Website Title -->
-    <title>Aria - Business HTML Landing Page Template</title>
+    <title>Bus-Book | Online Bus Ticket Booking & Reservation</title>
     
     <!-- Styles -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:500,700&display=swap&subset=latin-ext" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600&display=swap&subset=latin-ext" rel="stylesheet">
-   
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:500,700,800&display=swap&subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700&display=swap&subset=latin-ext" rel="stylesheet">
 
     <link href="{{ asset('AriaTheme/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('AriaTheme/css/fontawesome-all.css') }}" rel="stylesheet">
     <link href="{{ asset('AriaTheme/css/swiper.css') }}" rel="stylesheet">
 	<link href="{{ asset('AriaTheme/css/magnific-popup.css') }}" rel="stylesheet">
 	<link href="{{ asset('AriaTheme/css/styles.css') }}" rel="stylesheet">
-
-      <!-- Add Bootstrap CSS link -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
 	
 	<!-- Favicon  -->
     <link rel="icon" href="{{asset('AriaTheme/images/favicon.png')}}">
@@ -60,13 +56,11 @@
         @include('frontend.aria_includes.footer')
     </div>
 
+    <!-- AI Chatbot Floating Helper -->
+    @include('frontend.aria_includes.chatbot')
+
 
     <!-- Scripts -->
-     <!-- Add Bootstrap JS and jQuery scripts at the end of the body for functionality -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-
-    
     <script src="{{ asset('AriaTheme/js/jquery.min.js') }}"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
     <script src="{{ asset('AriaTheme/js/popper.min.js') }}"></script> <!-- Popper tooltip library for Bootstrap -->
     <script src="{{ asset('AriaTheme/js/bootstrap.min.js') }}"></script> <!-- Bootstrap framework -->
@@ -299,17 +293,19 @@
 
         });
     </script>
+
+    @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show fixed-bottom m-3" role="alert" style="max-width: 400px; z-index: 9999;">
+            <i class="fas fa-exclamation-circle mr-1"></i> {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {{ session()->forget('error') }}
+    @endif
+    @if(session('busAdded')=='1')
+        <script>alert('Bus Added Successfully');</script>
+        {{ session()->forget('busAdded') }}
+    @endif
 </body>
 </html>
-
-
-@if (session('error'))
-    <div class="alert alert-danger" role="alert">
-        {{ session('error') }}
-    </div>
-@endif
-{{ session()->forget('error') }}
-@if(session('busAdded')=='1')
-    <script>alert('Bus Added Successfully')</script>
-@endif
-{{ session()->forget('busAdded') }}
