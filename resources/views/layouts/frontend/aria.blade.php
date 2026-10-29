@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -73,223 +73,155 @@
     <script src="{{ asset('AriaTheme/js/scripts.js') }}"></script> <!-- Custom scripts -->
         <script>
         let selectedSeatsArray = [];
-        let bookingDetails;
+        let bookingDetails = {};
+        let busActiveStatus = {};
+
         $(document).ready(function() {
-            //---------   Disable buses which are fully booked -------------------
-            $('#booking_date').on("blur",function() {
-                console.log("blur called");
-                var booking_date = $(this).val();
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('bus.on.date', ['booking_date' => '']) }}" + "/" + booking_date,
-                    success: function(response) {
 
-                        bookingDetails = response.bookingDetails;
-                        busActiveStatus = response.busActiveStatus;
-                        console.log("blur",bookingDetails);
-                        console.log(busActiveStatus)
-                        
-                        checkArrExist = Object.keys(bookingDetails).length;
-                        if (checkArrExist != 0) {
-
-                            for (let busId in bookingDetails) {
-
-                                const seatStatuses = bookingDetails[busId];
-                                const totalSeats = Object.keys(seatStatuses).length;
-                                let bookedSeatsCount = 0;
-
-
-                                for (let seatNumber in seatStatuses) {
-                                    const seatStatus = seatStatuses[seatNumber];
-
-
-                                    if (seatStatus === 2) { // removing seatStatus === 1 ||  condition to enable the user if he had booked the seats
-                                        bookedSeatsCount++;
-                                    }
-
-                                }
-
-                                let selectedOption = $('#busSelect option[value="' + busId +'"]');
-                                
-                                if (bookedSeatsCount >= totalSeats) {
-                                    selectedOption.prop('disabled', true);
-                                } else {
-                                    selectedOption.prop('disabled', false);
-                                }
-                            }
-
-                        }
-                        // else{
-                        //     $('#busSelect option').prop('disabled', false);
-                            
-                        // }
-
-                        for(let bus in busActiveStatus){
-                            if(busActiveStatus[bus]==0){
-                                let selectedOption = $('#busSelect option[value="' + bus +'"]');
-                                 selectedOption.prop('disabled', true);
-                            }
-                        }
-
-                        $('#busSelect').trigger('change');
-
-                    },
-                    error: function(error) {
-
+            // --------- Helper: re-apply active-status + full-booked filters ---------------
+            function applyBusFilters() {
+                for (let bus in busActiveStatus) {
+                    if (busActiveStatus[bus] == 0) {
+                        $('#busSelect option[value=' + bus + ']').prop('disabled', true);
                     }
-                })
-                bookingDetails = bookingDetails;
-                
+                }
+                for (let busId in bookingDetails) {
+                    const seatStatuses = bookingDetails[busId];
+                    const totalSeats = Object.keys(seatStatuses).length;
+                    let bookedSeatsCount = 0;
+                    for (let seatNumber in seatStatuses) {
+                        if (seatStatuses[seatNumber] === 2) bookedSeatsCount++;
+                    }
+                    let opt = $('#busSelect option[value=' + busId + ']');
+                    if (bookedSeatsCount >= totalSeats) { opt.prop('disabled', true); }
+                    else { if (!opt.data('route-disabled')) opt.prop('disabled', false); }
+                }
+            }
+
+            $('#booking_date').on('change', function() {
+                var booking_date = $(this).val();
+                if (!booking_date) return;
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route("bus.on.date", ["booking_date" => ""]) }}' + '/' + booking_date,
+                    success: function(response) {
+                        bookingDetails  = response.bookingDetails  || {};
+                        busActiveStatus = response.busActiveStatus || {};
+                        $('#busSelect option:not(:first-child)').prop('disabled', false).removeData('route-disabled');
+                        applyBusFilters();
+                        var from = $('#from').val(), to = $('#to').val();
+                        if (from && to) applyRouteFilter(from, to);
+                        if ($('#busSelect').val()) $('#busSelect').trigger('change');
+                    },
+                    error: function() { console.log('Error fetching booking details.'); }
+                });
             });
-            //------------ Show bus seats on selecting bus option  --------------------
-            $('#busSelect').on("change",function() {
+
+            function applyRouteFilter(from, to) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route("bus.get.available", ["from" => ""]) }}' + '/' + from + '/' + to,
+                    success: function(response) {
+                        if (!response) return;
+                        let availableBuses = response.availableBuses;
+                        let buses = response.buses;
+                        let count = 0;
+                        $('#busSelect option:not(:first-child)').prop('disabled', false).removeData('route-disabled');
+                        for (let i in buses) {
+                            let found = false;
+                            for (let j in availableBuses) {
+                                if (buses[i].id == availableBuses[j].id) { found = true; count++; break; }
+                            }
+                            if (!found) {
+                                let opt = $('#busSelect option[value=' + buses[i].id + ']');
+                                opt.prop('disabled', true).data('route-disabled', true);
+                            }
+                        }
+                        applyBusFilters();
+                        $('#number').text('Available buses on this route: ' + count);
+                    },
+                    error: function() { console.log('Error fetching available buses.'); }
+                });
+            }
+
+            $('#from').on('change', function() {
+                var from = $(this).val(), to = $('#to').val();
+                if (from && to) applyRouteFilter(from, to);
+            });
+            $('#to').on('change', function() {
+                var from = $('#from').val(), to = $(this).val();
+                if (from && to) applyRouteFilter(from, to);
+            });
+
+            $('#busSelect').on('change', function() {
                 const selectedOption = $('#busSelect option:selected');
                 const totalSeats = parseInt(selectedOption.data('total-seats'));
-
+                const busId = selectedOption.val();
                 const seatSelection = $('#seatSelection');
                 seatSelection.empty();
-
+                selectedSeatsArray = [];
+                if (!totalSeats || !busId) return;
                 const seatsPerRow = 5;
                 const numRows = Math.ceil(totalSeats / seatsPerRow);
-
-
-
-                console.log("change :",bookingDetails);
                 for (let row = 1; row <= numRows; row++) {
-                    
                     const seatRow = $('<div class="seat-row d-flex"></div>');
-
                     for (let col = 1; col <= seatsPerRow; col++) {
                         const seatNumber = (row - 1) * seatsPerRow + col;
                         if (seatNumber <= totalSeats) {
-                            const seatDiv = $(
-                                '<a class="seat text-decoration-none" id="seat"></a>').text(
-                                'Seat ' + seatNumber).attr('value', seatNumber);
-
-
-                            const busId = selectedOption.val();
-
-
-                            const seatStatus = bookingDetails[busId] && bookingDetails[busId][seatNumber] ||0;
-                            
-                            if (seatStatus === 0) {
-                                seatDiv.addClass('seat-unbooked');
-                            } else if (seatStatus === 1) {
-                                seatDiv.addClass('seat-booked');
-                            } else if (seatStatus === 2) {
-                                seatDiv.addClass('seat-booked-other');
-                            }
-
-                            if (col === 3) {
-                                const emptySeatDiv = $('<div class="seat empty-seat"></div>');
-                                seatRow.append(emptySeatDiv);
-                            }
+                            const seatDiv = $('<a class="seat text-decoration-none" data-seat="' + seatNumber + '"></a>').text('S' + seatNumber);
+                            const seatStatus = (bookingDetails[busId] && bookingDetails[busId][seatNumber]) || 0;
+                            if (seatStatus === 1) seatDiv.addClass('seat-booked');
+                            else if (seatStatus === 2) seatDiv.addClass('seat-booked-other');
+                            if (col === 3) seatRow.append($('<div class="seat empty-seat"></div>'));
                             seatRow.append(seatDiv);
                         }
                     }
-
                     seatSelection.append(seatRow);
                 }
             });
 
-
-
-
-            //------------- seat selection toggle color and store seat numbers in array --------------
-            $('#seatSelection').on('click', '#seat', function() {
+            $('#seatSelection').on('click', '.seat:not(.seat-booked):not(.seat-booked-other)', function() {
                 $(this).toggleClass('selected-seat');
-
-                const seatValue = $(this).attr('value');
+                const seatValue = String($(this).data('seat'));
                 const isSelected = $(this).hasClass('selected-seat');
-
-                if (isSelected) {
-                    console.log("selected", seatValue);
-                    selectedSeatsArray.push(seatValue);
-
-                } else {
-                    console.log("de-selected", seatValue);
-                    let newArr = selectedSeatsArray.filter(element => element !== seatValue);
-                    selectedSeatsArray = newArr;
-                }
-                console.log(selectedSeatsArray);
-
+                if (isSelected) { selectedSeatsArray.push(seatValue); }
+                else { selectedSeatsArray = selectedSeatsArray.filter(s => s !== seatValue); }
             });
 
-            $('#submit-booking-form').click(function() {
-                console.log("check");
+            $('#submit-booking-form').on('click', function() {
                 var cus_name = $('#cus_name').val();
                 var booking_date = $('#booking_date').val();
                 var bus_id = $('#busSelect').val();
-                const seats = selectedSeatsArray;
-
-                // console.log(cus_name);
-                // console.log(booking_date);
-                // console.log(bus_id);
-                // console.log(seats.length);
-
+                if (!cus_name || !booking_date || !bus_id) {
+                    alert('Please fill in your name, travel date, and select a bus.'); return;
+                }
+                if (selectedSeatsArray.length === 0) {
+                    alert('Please select at least one seat.'); return;
+                }
+                if (!$('#lterms').is(':checked')) {
+                    alert('Please agree to the Terms & Conditions.'); return;
+                }
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('cus.post.booking') }}',
+                    url: '{{ route("cus.post.booking") }}',
                     data: {
                         _token: '{{ csrf_token() }}',
                         cus_name: cus_name,
                         booking_date: booking_date,
                         bus_id: bus_id,
-                        seats: seats
+                        seats: selectedSeatsArray
                     },
-                    success: function(response) {
-                        alert("Journey Booked Successfully!");
-                        window.location.href = '{{ route('home') }}';
+                    success: function() {
+                        alert('Journey Booked Successfully!');
+                        window.location.href = '{{ route("home") }}';
                     },
-                    error: function(error) {
-                        console.log('error');
-                    }
-
-
-                });
-
-            });
-
-
-            // Filter Available bus from travel source and destination
-            $('#to').on("blur",function(){
-                var from = $('#from').val();
-                var to = $(this).val();
-
-                $.ajax({
-                    type:'GET',
-                    url: "{{ route('bus.get.available',['from' => ''],['to' => '']) }}" + "/" + from +"/" + to,
-                    success : function(response){
-                        if(response){
-                    
-                            let availableBuses = response.availableBuses;
-                            let buses = response.buses;
-                            let count = 0;
-                            for(let i in buses ){
-                                let flag = 0;
-                                for(let j in availableBuses){
-                                    if(buses[i].id==availableBuses[j].id){
-                                        flag=1;
-                                        count++;
-                                        break;
-                                    }                               
-                                }
-                                if(!flag){
-                                    let bus = buses[i].id;
-                                    let selectedOption = $('#busSelect option[value="' + bus +'"]');
-                                    selectedOption.prop('disabled', true);
-                                }
-                            }
-                            $('#number').text("Number of avaialble buses :"+count);
-                            
-                        }
-                    },
-                    error: function(error) {
-                        console.log('error');
+                    error: function(xhr) {
+                        var msg = 'Booking failed. Please try again.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+                        alert(msg);
                     }
                 });
             });
-
 
         });
     </script>

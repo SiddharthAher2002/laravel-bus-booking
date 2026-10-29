@@ -1,109 +1,152 @@
 @extends('layouts.frontend.aria')
 
 @section('content')
-    <div class ="bus-book-form-container ">
+    <div class="bus-book-form-container">
         <div class="container">
             <div class="form-1">
                 <div class="container">
-                    <div class="row justify-content-center mb-4">
+
+                    {{-- Page heading --}}
+                    <div class="row justify-content-center mb-5">
                         <div class="col-12 text-center">
                             <h2 class="text-white font-weight-bold" style="font-family: 'Montserrat', sans-serif;">Book Your Journey</h2>
-                            <p class="text-muted small">Select your travel date, destination, and choose your preferred seats.</p>
+                            <p class="text-white-50 small">Select your route, travel date and pick your seats.</p>
                         </div>
                     </div>
+
                     <div class="row">
+
+                        {{-- ===== LEFT COL: Booking Form ===== --}}
                         <div class="col-lg-6">
-                            <!-- Call Me Form -->
-                            <form method="post">
-                                <label>Passenger Details</label>
+                            <form id="booking-form" method="POST" action="{{ route('cus.post.booking') }}">
+                                @csrf
+
+                                {{-- Passenger Details --}}
+                                <span class="field-section-label">Passenger Details</span>
+
                                 <div class="form-group">
-                                    <input type="text" class="form-control-input" id="cus_name" name="cus_name">
-                                     <label class="label-control" for="cus_name">Name</label>
+                                    <input type="text" class="form-control-input notEmpty" id="cus_name" name="cus_name" required>
+                                    <label class="label-control" for="cus_name">Full Name</label>
                                 </div>
+
                                 <div class="form-group">
-                                    <input type="text" class="form-control-input" id="cus_phone" name="cus_phone">
-                                    <label class="label-control" for="cus_phone">Phone</label>
+                                    <input type="tel" class="form-control-input" id="cus_phone" name="cus_phone">
+                                    <label class="label-control" for="cus_phone">Phone Number</label>
                                 </div>
+
                                 <div class="form-group">
                                     <input type="email" class="form-control-input" id="cus_email" name="cus_email">
-                                    <label class="label-control" for="cus_email">Email</label>
+                                    <label class="label-control" for="cus_email">Email Address</label>
                                 </div>
+
                                 <div class="form-group">
-                                    <input type="age" class="form-control-input" id="cus_age" name="cus_age">
+                                    <input type="number" class="form-control-input" id="cus_age" name="cus_age" min="1" max="120">
                                     <label class="label-control" for="cus_age">Age</label>
                                 </div>
 
-                                <label>Date of Travel & Select Bus</label>
-                                <div class="form-group">
-                                    <select class="form-control-select" id="from" name="from">
-                                        <option class="select-option" value="" disabled selected>From</option>
-                                        <option class="select-option" value="Nashik" >Nashik</option>
-                                        <option class="select-option" value="Pune" >Pune</option>
-                                        <option class="select-option" value="Hydrabad" >Hydrabad</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <select class="form-control-select" id="to" name="to">
-                                        <option class="select-option" value="" disabled selected>To</option>
-                                        <option class="select-option" value="Nashik" >Nashik</option>
-                                        <option class="select-option" value="Pune" >Pune</option>
-                                        <option class="select-option" value="Hydrabad" >Hydrabad</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <input type="date" class="form-control-input" id="booking_date" name="booking_date">
-                                </div>
-                                <p id="number" style="font-size:14px;margin: 0px;"></p>
+                                {{-- Travel Details --}}
+                                <span class="field-section-label mt-4">Date of Travel &amp; Bus</span>
 
                                 <div class="form-group">
-                                    <select class="form-control-select" id="busSelect" name="busSelect">
-                                        <option class="select-option" value="" disabled selected>Available Buses</option>
+                                    <select class="form-control-select" id="from" name="from" required>
+                                        <option value="" disabled selected>From</option>
+                                        <option value="Nashik">Nashik</option>
+                                        <option value="Pune">Pune</option>
+                                        <option value="Hydrabad">Hyderabad</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <select class="form-control-select" id="to" name="to" required>
+                                        <option value="" disabled selected>To</option>
+                                        <option value="Nashik">Nashik</option>
+                                        <option value="Pune">Pune</option>
+                                        <option value="Hydrabad">Hyderabad</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="date" class="form-control-input notEmpty" id="booking_date" name="booking_date" required>
+                                    <label class="label-control" for="booking_date">Travel Date</label>
+                                </div>
+
+                                <p id="number" class="text-white-50 small mb-2"></p>
+
+                                <div class="form-group">
+                                    <select class="form-control-select" id="busSelect" name="busSelect" required>
+                                        <option value="" disabled selected>Select a Bus</option>
                                         @foreach ($buses as $bus)
-                                            <option class="select-option" value="{{ $bus->id }}"
-                                                data-total-seats="{{ $bus->bus_total_seats }}">
-                                                {{ $bus->bus_name }}</option>
+                                            <option value="{{ $bus->id }}" data-total-seats="{{ $bus->bus_total_seats }}">
+                                                {{ $bus->bus_name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
+
+                                {{-- Hidden: carries seat list on AJAX submit --}}
+                                <input type="hidden" id="selected_seats_input" name="seats">
+
                             </form>
-                            <!-- end of call me form -->
-                        </div> <!-- end of col -->
+                        </div>
+                        {{-- end left col --}}
 
-
+                        {{-- ===== RIGHT COL: Seat Map ===== --}}
                         <div class="col-lg-6">
-                            <label for="seatSelect" class="form-label text-center d-block font-weight-bold">Select Your Seats</label>
-                            
-                            <div class="seat-legend mb-3 text-center">
-                                <span class="badge badge-secondary mr-2"><i class="far fa-square mr-1"></i> Available</span>
-                                <span class="badge badge-success mr-2" style="background-color: #14bf98;"><i class="fas fa-check-square mr-1"></i> Selected</span>
-                                <span class="badge badge-warning text-dark"><i class="fas fa-times-circle mr-1"></i> Booked</span>
+                            <span class="field-section-label">Select Your Seats</span>
+
+                            {{-- Legend --}}
+                            <div class="seat-legend mb-3">
+                                <span class="legend-item">
+                                    <span class="legend-box" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.6);"></span>
+                                    <span class="text-white-50 small">Available</span>
+                                </span>
+                                <span class="legend-item">
+                                    <span class="legend-box" style="background:#14bf98;"></span>
+                                    <span class="text-white-50 small">Selected</span>
+                                </span>
+                                <span class="legend-item">
+                                    <span class="legend-box" style="background:#e67e22;"></span>
+                                    <span class="text-white-50 small">Your Booking</span>
+                                </span>
+                                <span class="legend-item">
+                                    <span class="legend-box" style="background:#e74c3c;"></span>
+                                    <span class="text-white-50 small">Booked</span>
+                                </span>
                             </div>
 
+                            {{-- Seat grid --}}
                             <div class="seat-selection" id="seatSelection">
-                                <!-- Render the Seats from ajax -->
+                                <p class="text-white-50 text-center small mt-2 mb-2" id="seat-placeholder">
+                                    Select a bus to view available seats.
+                                </p>
                             </div>
-                        </div> <!-- end of col -->
+                        </div>
+                        {{-- end right col --}}
 
-                        
-                    </div> <!-- end of row -->
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-md-6 col-lg-4 form-group">
-                            <button type="submit" class="form-control-submit-button btn-block" id="submit-booking-form">CONFIRM BOOKING</button>
+                    </div>
+                    {{-- end row --}}
+
+                    {{-- Confirm button --}}
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-12 col-md-8 col-lg-5">
+                            <button type="button" class="form-control-submit-button" id="submit-booking-form">
+                                Confirm Booking
+                            </button>
                         </div>
                     </div>
 
-                    <div class="form-group checkbox white">
-                        <input type="checkbox" id="lterms" value="Agreed-to-Terms" name="lterms" required>I agree with
-                        Aria's stated <a class="white" href="privacy-policy.html">Privacy Policy</a> and <a class="white"
-                            href="terms-conditions.html">Terms & Conditions</a>
-                        <div class="help-block with-errors"></div>
+                    {{-- Terms --}}
+                    <div class="form-group checkbox white text-center mt-3">
+                        <input type="checkbox" id="lterms" name="lterms">
+                        I agree with Aria's
+                        <a href="privacy-policy.html">Privacy Policy</a> and
+                        <a href="terms-conditions.html">Terms &amp; Conditions</a>
                     </div>
 
-                </div> <!-- end of container -->
-            </div> <!-- end of form-1 -->
-            <!-- end of call me -->
+                </div>
+                {{-- end inner container --}}
+            </div>
+            {{-- end form-1 --}}
         </div>
     </div>
-
-    <!-- Call Me -->
 @endsection

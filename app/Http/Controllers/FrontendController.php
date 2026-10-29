@@ -21,19 +21,29 @@ class FrontendController extends Controller
     }
     public function postBookingForm(Request $request)
     {
+        $request->validate([
+            'cus_name'     => 'required|string|max:20',
+            'booking_date' => 'required|date',
+            'bus_id'       => 'required|integer|exists:bus,id',
+            'seats'        => 'required|array|min:1',
+        ]);
+
         $booking = new Booking();
-
-        $booking->cus_id = Auth::user()->id;
-        $booking->cus_name = $request->post('cus_name');
+        $booking->cus_id       = Auth::user()->id;
+        $booking->cus_name     = $request->post('cus_name');
         $booking->booking_date = $request->post('booking_date');
-        $booking->bus_id = $request->post('bus_id');
+        $booking->bus_id       = $request->post('bus_id');
 
-        $seat_Arr = $request->post('seats');
-        $seatString = implode(',', $seat_Arr). ',';
+        $seat_Arr   = $request->post('seats');
+        $seatString = implode(',', $seat_Arr) . ',';
 
         $booking->seat_numbers = $seatString;
-        if ($booking->save())
-            return $seatString;
+
+        if ($booking->save()) {
+            return response()->json(['message' => 'Booking successful'], 200);
+        }
+
+        return response()->json(['message' => 'Booking failed'], 500);
     }
     public function retrieveBookingDetails($date = null)
     {
