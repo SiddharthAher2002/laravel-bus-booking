@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\AdminController;
 use \App\Http\Controllers\Auth\AdminLoginController;
+use \App\Http\Controllers\AdminController;
 use \App\Http\Controllers\FrontendController;
 use \App\Http\Controllers\Index;
 
@@ -35,7 +35,7 @@ Route::group(['prefix' => 'bus-book', 'middleware' => ['auth']], function () {
 });
 
 // AI Chatbot Route (Public for all visitors)
-Route::post('/chatbot/message', [\App\Http\Controllers\ChatbotController::class, 'sendMessage'])->name('chatbot.send');
+Route::post('/helper/support', [\App\Http\Controllers\ChatbotController::class, 'sendMessage'])->name('chatbot.send');
 
 // Admin Authentication (Public / Guest)
 Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');

@@ -1,7 +1,8 @@
 <!-- AI Chatbot Floating Widget -->
 <div id="busbook-chatbot-container">
     <!-- Floating Launcher Button -->
-    <button id="chatbot-toggle-btn" class="chatbot-launcher" aria-label="Open AI Assistant" title="Need help? Ask our AI Assistant!">
+    <button id="chatbot-toggle-btn" class="chatbot-launcher" aria-label="Open AI Assistant"
+        title="Need help? Ask our AI Assistant!">
         <div class="launcher-pulse"></div>
         <div class="launcher-icon">
             <i class="fas fa-robot chat-open-icon"></i>
@@ -40,7 +41,9 @@
                 </div>
                 <div class="message-bubble">
                     <p class="mb-1">Hello! 👋 I'm your Bus-Book AI Assistant.</p>
-                    <p class="mb-0">Ask me about <strong>routes</strong>, <strong>schedules</strong>, <strong>fares</strong>, or <strong>booking tickets</strong>!</p>
+                    <p class="mb-0">Ask me about <strong>routes</strong>, <strong>schedules</strong>,
+                        <strong>fares</strong>, or <strong>booking tickets</strong>!
+                    </p>
                 </div>
             </div>
 
@@ -76,8 +79,10 @@
             <form id="chatbot-form" class="chatbot-input-form">
                 @csrf
                 <div class="input-wrapper">
-                    <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Ask about routes, fares, booking..." autocomplete="off" maxlength="1000" required>
-                    <button type="submit" id="chatbot-send-btn" class="chatbot-send-btn" aria-label="Send Message" title="Send">
+                    <input type="text" id="chatbot-input" class="chatbot-input"
+                        placeholder="Ask about routes, fares, booking..." autocomplete="off" maxlength="1000" required>
+                    <button type="submit" id="chatbot-send-btn" class="chatbot-send-btn" aria-label="Send Message"
+                        title="Send">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
@@ -151,8 +156,15 @@
     }
 
     @keyframes chatbot-pulse {
-        0% { transform: scale(1); opacity: 0.8; }
-        100% { transform: scale(1.1); opacity: 0; }
+        0% {
+            transform: scale(1);
+            opacity: 0.8;
+        }
+
+        100% {
+            transform: scale(1.1);
+            opacity: 0;
+        }
     }
 
     /* Compact, Viewport-Bounded Light Theme Chat Window */
@@ -169,20 +181,29 @@
         border-radius: 14px !important;
         box-shadow: 0 12px 35px rgba(0, 0, 0, 0.16), 0 3px 10px rgba(0, 0, 0, 0.08) !important;
         border: 1px solid #e2e8f0 !important;
-        display: none !important; /* Hidden until opened */
+        display: none !important;
+        /* Hidden until opened */
         flex-direction: column !important;
         overflow: hidden !important;
         z-index: 999999 !important;
     }
 
     .chatbot-window.is-open {
-        display: flex !important; /* Fully open */
+        display: flex !important;
+        /* Fully open */
         animation: chat-popup-anim 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes chat-popup-anim {
-        from { opacity: 0; transform: translateY(10px) scale(0.97); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
+        from {
+            opacity: 0;
+            transform: translateY(10px) scale(0.97);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
     }
 
     /* Header: Emerald Teal Gradient */
@@ -268,7 +289,8 @@
     /* Messages Area: Clean Light Slate */
     .chatbot-messages {
         flex: 1 1 auto !important;
-        min-height: 0 !important; /* Prevents flex overflow */
+        min-height: 0 !important;
+        /* Prevents flex overflow */
         padding: 9px 10px !important;
         overflow-y: auto !important;
         background: #f8fafc !important;
@@ -281,13 +303,16 @@
     .chatbot-messages::-webkit-scrollbar {
         width: 4px;
     }
+
     .chatbot-messages::-webkit-scrollbar-track {
         background: transparent;
     }
+
     .chatbot-messages::-webkit-scrollbar-thumb {
         background: #cbd5e1;
         border-radius: 4px;
     }
+
     .chatbot-messages::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
     }
@@ -300,8 +325,15 @@
     }
 
     @keyframes msg-fade-in {
-        from { opacity: 0; transform: translateY(3px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(3px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .bot-message {
@@ -426,12 +458,27 @@
         animation: typing-bounce 1.2s infinite ease-in-out;
     }
 
-    .typing-bubble .dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-bubble .dot:nth-child(3) { animation-delay: 0.4s; }
+    .typing-bubble .dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-bubble .dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
 
     @keyframes typing-bounce {
-        0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-        40% { transform: scale(1); opacity: 1; }
+
+        0%,
+        80%,
+        100% {
+            transform: scale(0.6);
+            opacity: 0.4;
+        }
+
+        40% {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
 
     .typing-text {
@@ -519,6 +566,7 @@
             bottom: 12px;
             right: 12px;
         }
+
         .chatbot-window {
             right: 10px !important;
             left: 10px !important;
@@ -533,7 +581,7 @@
 
 <!-- Chatbot Client-Side Logic -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const toggleBtn = document.getElementById('chatbot-toggle-btn');
         const closeBtn = document.getElementById('chatbot-close-btn');
         const chatWindow = document.getElementById('chatbot-window');
@@ -556,7 +604,7 @@
             toggleBtn.querySelector('.chat-close-icon').classList.remove('d-none');
             const badge = toggleBtn.querySelector('.launcher-badge');
             if (badge) badge.textContent = 'Close';
-            setTimeout(function () {
+            setTimeout(function() {
                 chatInput.focus();
             }, 80);
             scrollToBottom();
@@ -588,21 +636,21 @@
 
         toggleBtn.addEventListener('click', toggleChat);
 
-        closeBtn.addEventListener('click', function (e) {
+        closeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             closeChat();
         });
 
         // Close on Escape key press
-        document.addEventListener('keydown', function (e) {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && isChatOpen) {
                 closeChat();
             }
         });
 
         // Close when clicking outside of the chat window and launcher
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             if (isChatOpen && !chatWindow.contains(e.target) && !toggleBtn.contains(e.target)) {
                 closeChat();
             }
@@ -634,9 +682,9 @@
 
             const avatarDiv = document.createElement('div');
             avatarDiv.className = 'message-avatar';
-            avatarDiv.innerHTML = sender === 'bot' 
-                ? '<i class="fas fa-robot"></i>' 
-                : '<i class="fas fa-user"></i>';
+            avatarDiv.innerHTML = sender === 'bot' ?
+                '<i class="fas fa-robot"></i>' :
+                '<i class="fas fa-user"></i>';
 
             const bubbleDiv = document.createElement('div');
             bubbleDiv.className = 'message-bubble';
@@ -671,48 +719,75 @@
 
             // Perform AJAX request
             fetch(chatEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({ message: query })
-            })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                chatTyping.classList.add('d-none');
-                sendBtn.disabled = false;
-                chatInput.disabled = false;
-                chatInput.focus();
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Accept': 'application/json'
+                    },
+                    body: new URLSearchParams({
+                        message: query,
+                        _token: csrfToken
+                    }).toString()
+                })
+                .then(async function(response) {
+                    const responseText = await response.text();
 
-                if (data && data.reply) {
-                    appendMessage('bot', data.reply);
-                } else {
-                    appendMessage('bot', "Sorry, I couldn't process your request right now. Please try again.");
-                }
-            })
-            .catch(function (error) {
-                console.error('Chatbot AJAX Error:', error);
-                chatTyping.classList.add('d-none');
-                sendBtn.disabled = false;
-                chatInput.disabled = false;
-                chatInput.focus();
-                appendMessage('bot', "Connection error: Unable to reach AI server. Please verify your internet connection or try again later.");
-            });
+                    let data;
+
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch (error) {
+                        console.error(
+                            'Chatbot response was not JSON:',
+                            response.status,
+                            responseText.substring(0, 300)
+                        );
+
+                        throw new Error(
+                            'The server returned HTTP ' + response.status +
+                            ' instead of a JSON response.'
+                        );
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(data.message || 'HTTP ' + response.status);
+                    }
+                    return data;
+                })
+                .then(function(data) {
+                    chatTyping.classList.add('d-none');
+                    sendBtn.disabled = false;
+                    chatInput.disabled = false;
+                    chatInput.focus();
+
+                    if (data && data.reply) {
+                        appendMessage('bot', data.reply);
+                    } else {
+                        appendMessage('bot',
+                            "Sorry, I couldn't process your request right now. Please try again.");
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Chatbot AJAX Error:', error);
+                    chatTyping.classList.add('d-none');
+                    sendBtn.disabled = false;
+                    chatInput.disabled = false;
+                    chatInput.focus();
+                    appendMessage('bot',
+                        "Connection error: Unable to reach AI server. Please verify your internet connection or try again later."
+                    );
+                });
         }
 
         // Form submit listener
-        chatForm.addEventListener('submit', function (e) {
+        chatForm.addEventListener('submit', function(e) {
             e.preventDefault();
             submitQuery(chatInput.value);
         });
 
         // Quick suggestion chips click listener
-        document.querySelectorAll('.suggestion-chip').forEach(function (chip) {
-            chip.addEventListener('click', function () {
+        document.querySelectorAll('.suggestion-chip').forEach(function(chip) {
+            chip.addEventListener('click', function() {
                 const query = this.getAttribute('data-query');
                 if (query) {
                     submitQuery(query);
