@@ -1,64 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# 🚌 Bus-Book — Online Bus Ticket Booking & Reservation
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+DEPLOYED : https://bus-booking.nfy.fyi/
 
-## About Laravel
+A modern, responsive online bus reservation and management platform built with **Laravel** and the **Aria Theme**, featuring real-time seat selection and an **AI Travel Assistant**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Key Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Interactive Seat Selection & Booking**: Real-time visual seat map supporting individual seat selection, instant state toggling, and multi-passenger bookings.
+- **Dynamic Route & Date Filtering**: Automatically discovers available buses based on selected travel source, destination, and departure date.
+- **Operator & Bus Registration**: Easy onboarding flow for bus operators to register fleet details, routes, fares, and capacity.
+- **Admin Dashboard**: Manage bus fleets, activate/deactivate routes, monitor user accounts, and review passenger seat bookings.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🤖 Feature Highlight: AI Travel Assistant (Chatbot)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Bus-Book includes an **intelligent, floating AI Assistant** designed to guide visitors 24/7 without agent intervention.
 
-## Laravel Sponsors
+### 🌟 What Makes It Special?
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+1. **Live Database Grounding**:
+   - The chatbot pulls the active fleet catalog (routes, fares, travel duration, capacity) straight from the database.
+   - It only answers with verified, real-time bus inventory—no hallucinated routes or fake prices.
 
-### Premium Partners
+2. **Strict Domain Guardrails (`instruction.md`)**:
+   - Programmed with strict system boundaries: assists **only** with routes, fares, bus schedules, and booking navigation.
+   - Politely rejects out-of-scope requests (e.g., general trivia, weather, coding, jokes) using fast pre-flight pattern checks and system prompt constraints.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+3. **Smooth User Experience**:
+   - Floating widget with pulse animation, quick-tap suggestion chips, and live typing indicators.
+   - Fully responsive for both desktop and mobile devices.
 
-## Contributing
+4. **Configurable OpenRouter Integration**:
+   - Connects to OpenRouter API (defaults to free, fast inference models such as `nvidia/nemotron-3-ultra-550b-a55b:free` or any preferred model).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🛠️ Tech Stack
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Backend**: Laravel 8+, PHP 7.4+ / 8.x, MySQL
+- **Frontend**: Blade Templates, Bootstrap 4, jQuery, FontAwesome 5
+- **AI / LLM**: OpenRouter API via `ChatbotService` + cURL
+- **Styling**: Aria Landing Page Theme with custom bus seat layouts
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🚀 Quick Start Guide
 
-## License
+### 1. Clone & Install Dependencies
+```bash
+git clone https://github.com/your-username/laravel-bus-booking.git
+cd laravel-bus-booking
+composer install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. Environment Configuration
+Copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Configure your database and AI chatbot credentials in `.env`:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=bus_booking
+DB_USERNAME=root
+DB_PASSWORD=
+
+# AI Chatbot Configuration
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+CHATBOT_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free
+```
+
+### 3. Run Migrations & Seed
+```bash
+php artisan migrate
+```
+
+### 4. Start the Application
+```bash
+php artisan serve
+```
+Visit `http://127.0.0.1:8000` in your browser.
+
+---
+
+## 📁 AI Chatbot Architecture Overview
+
+```text
+├── app/
+│   ├── Http/Controllers/ChatbotController.php   # Handles incoming message requests & CSRF
+│   └── Services/ChatbotService.php              # Guardrails, DB catalog injection & OpenRouter API cURL
+├── config/
+│   └── chatbot.php                              # Chatbot configurations (API keys, models, timeouts)
+├── resources/views/frontend/aria_includes/
+│   └── chatbot.blade.php                        # Floating widget, bubble UI & AJAX script
+└── storage/app/chatbot/
+    └── instruction.md                           # System prompt rules & domain grounding
+```
+
+---
+
+## 📄 License
+This project is open-source and available under the [MIT License](LICENSE).
+
+
